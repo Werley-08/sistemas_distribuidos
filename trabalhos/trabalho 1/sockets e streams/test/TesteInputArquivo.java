@@ -7,15 +7,18 @@ import java.io.FileInputStream;
 
 public class TesteInputArquivo {
     public static void main(String[] args) throws Exception {
-        FileInputStream fis = new FileInputStream("colaboradores.dat");
+        try (FileInputStream fis = new FileInputStream("colaboradores.dat")) {
+            ColaboradorInputStream cis = new ColaboradorInputStream(fis);
 
-        ColaboradorInputStream cis =
-                new ColaboradorInputStream(fis);
+            Colaborador[] lista = cis.lerTodos();
 
-        Colaborador c = cis.ler();
-
-        System.out.println("Nome: " + c.getNome());
-
-        fis.close();
+            System.out.println("=== DADOS RECEBIDOS ===");
+            for (Colaborador c : lista) {
+                System.out.println("ID: "      + c.getId());
+                System.out.println("Nome: "    + c.getNome());
+                System.out.println("Salário: " + c.getSalario());
+                System.out.println("---");
+            }
+        }
     }
 }

@@ -18,6 +18,7 @@ public class ClienteTCP {
                 new ColaboradorOutputStream(lista, 1, socket.getOutputStream());
 
         cos.enviar();
+        System.out.println("Enviado com sucesso!");
 
         socket.close();
     }

@@ -9,17 +9,17 @@ import java.net.Socket;
 public class ServidorTCP {
     public static void main(String[] args) throws Exception {
         ServerSocket server = new ServerSocket(12345);
+        while (true) {
+            Socket socket = server.accept();
 
-        Socket socket = server.accept();
+            ColaboradorInputStream cis =
+                    new ColaboradorInputStream(socket.getInputStream());
 
-        ColaboradorInputStream cis =
-                new ColaboradorInputStream(socket.getInputStream());
+            Colaborador[] lista = cis.lerTodos();
+            System.out.println("Recebido: " + lista[0].getNome());
 
-        Colaborador c = cis.ler();
+            socket.close();
+        }
 
-        System.out.println("Recebido: " + c.getNome());
-
-        socket.close();
-        server.close();
     }
 }

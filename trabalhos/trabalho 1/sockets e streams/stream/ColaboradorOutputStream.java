@@ -15,6 +15,8 @@ public class ColaboradorOutputStream extends OutputStream {
     public ColaboradorOutputStream(Colaborador[] colaboradores,
                                    int quantidade,
                                    OutputStream out) {
+        if(quantidade > colaboradores.length)
+            throw new IllegalArgumentException("quantidade maior que o array de colaboradores");
         this.colaboradores = colaboradores;
         this.quantidade = quantidade;
         this.out = out;
@@ -26,6 +28,9 @@ public class ColaboradorOutputStream extends OutputStream {
     }
 
     public void enviar() throws IOException {
+
+        writeInt(quantidade);
+
         for (int i = 0; i < quantidade; i++) {
             Colaborador c = colaboradores[i];
 
@@ -42,6 +47,8 @@ public class ColaboradorOutputStream extends OutputStream {
             writeInt(salarioBytes.length);
             out.write(salarioBytes);
         }
+
+        out.flush();
     }
 
     private void writeInt(int valor) throws IOException {
