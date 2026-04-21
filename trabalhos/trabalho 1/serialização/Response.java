@@ -1,23 +1,13 @@
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.Serializable;
 
-public class Response {
+public class Response implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private String mensagem;
 
     public Response(String mensagem) {
         this.mensagem = mensagem;
-    }
-
-    // SERIALIZAÇÃO
-    public void write(DataOutputStream out) throws IOException {
-        out.writeUTF(mensagem);
-    }
-
-    // DESSERIALIZAÇÃO
-    public static Response read(DataInputStream in) throws IOException {
-        String msg = in.readUTF();
-        return new Response(msg);
     }
 
     public String getMensagem() {

@@ -14,11 +14,11 @@ public class Servidor {
                 Socket socket = serverSocket.accept();
                 System.out.println("Cliente conectado!");
 
-                DataInputStream in = new DataInputStream(socket.getInputStream());
-                DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 
-                // DESERIALIZAÇÃO (receber request)
-                Request req = Request.read(in);
+                // DESSERIALIZAÇÃO
+                Request req = (Request) in.readObject();
 
                 System.out.println("Recebido: " + req.getNome() + " - " + req.getValor());
 
@@ -27,13 +27,14 @@ public class Servidor {
 
                 Response response = new Response(respostaTexto);
 
-                // SERIALIZAÇÃO (enviar resposta)
-                response.write(out);
+                // SERIALIZAÇÃO
+                out.writeObject(response);
+                out.flush();
 
                 socket.close();
             }
 
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

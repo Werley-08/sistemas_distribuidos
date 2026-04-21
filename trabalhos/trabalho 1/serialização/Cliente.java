@@ -9,20 +9,21 @@ public class Cliente {
 
         try (Socket socket = new Socket(host, porta)) {
 
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            DataInputStream in = new DataInputStream(socket.getInputStream());
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
             Request req = new Request(1, "João", 3000.0);
 
-            // SERIALIZAÇÃO (enviar)
-            req.write(out);
+            // SERIALIZAÇÃO
+            out.writeObject(req);
+            out.flush();
 
-            // DESERIALIZAÇÃO (receber resposta)
-            Response response = Response.read(in);
+            // DESSERIALIZAÇÃO
+            Response response = (Response) in.readObject();
 
             System.out.println("Resposta do servidor: " + response.getMensagem());
 
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
